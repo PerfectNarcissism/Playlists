@@ -83,7 +83,9 @@ export class AppComponent implements OnInit{
   }
 
   deletePlaylist(playlist:Playlist){
-    this.appService.deleteService(playlist.nombre)
+    this.appService.deleteService(playlist.nombre).subscribe(
+      result => console.log(result)
+    );
     this.findAllPlaylists();
   }
   

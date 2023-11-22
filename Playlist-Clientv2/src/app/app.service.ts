@@ -34,7 +34,9 @@ export class AppService{
         )
     }
 
-    deleteService(name:string):void{
-        this.http.delete(this.urlEndpoint+"/"+name)
+    deleteService(name:string):Observable<any>{
+        return this.http.delete(this.urlEndpoint+"/"+name).pipe(
+            map(response => response as any)
+        )
     }
 }
