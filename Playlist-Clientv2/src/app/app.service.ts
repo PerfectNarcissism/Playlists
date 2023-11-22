@@ -33,4 +33,8 @@ export class AppService{
             map(response => response as Playlist)
         )
     }
+
+    deleteService(name:string):void{
+        this.http.delete(this.urlEndpoint+"/"+name)
+    }
 }

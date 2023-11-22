@@ -1,10 +1,8 @@
 package com.quipux.playlist.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quipux.playlist.dao.Playlist;
-import com.quipux.playlist.dao.Song;
-import com.quipux.playlist.repository.PlaylistRepository;
-import com.quipux.playlist.repository.SongRepository;
-
-import jakarta.transaction.Transactional;
+import com.quipux.playlist.service.PlaylistService;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -29,75 +23,37 @@ import jakarta.transaction.Transactional;
 public class PlaylistController {
 	
 	@Autowired
-	PlaylistRepository playlistRepository;
+	PlaylistService playlistService;
 	
-	@Autowired
-	SongRepository songRepository;
 	
+	//API para la creación de playlist
 	@PostMapping("")
-	public ResponseEntity<Playlist> savePlaylist(@RequestBody Playlist playlist){
-		Playlist newPlaylist = new Playlist();
-		if(!playlist.getNombre().isBlank() || playlist.getNombre()!=null) {
-			newPlaylist = playlistRepository.save(playlist);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		return new ResponseEntity<>(newPlaylist, HttpStatus.CREATED);
+	public ResponseEntity<?> savePlaylist(@RequestBody Playlist playlist){
+		return playlistService.savePlaylist(playlist);
 	}
 	
+	//API para la consulta de todas las playlists
 	@GetMapping("")
-	public ResponseEntity<List<Playlist>> findAllPlaylists(){
-		try {
-			List<Playlist> listPlaylists = new ArrayList<Playlist>();
-			playlistRepository.findAll().forEach(listPlaylists::add);
-			
-			if(listPlaylists.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<>(listPlaylists, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<?> findAllPlaylists(){
+		return playlistService.findAllPlaylists();
 	}
 	
+	//API para la consulta por nombre de playlist
 	@GetMapping("/{listName}")
-	public ResponseEntity<Playlist> findByListName(@PathVariable("listName") String listName){
-		Playlist playlistData = playlistRepository.findByNombre(listName);
-		if(playlistData!= null && playlistData.getNombre()!=null) {
-			return new ResponseEntity<>(playlistData, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> findByListName(@PathVariable("listName") String listName){
+		return playlistService.findByListName(listName);
 	}
 	
-	@Transactional
+	//API para la eliminacón de playlist por nombre
 	@DeleteMapping("/{listName}")
-	public ResponseEntity<Playlist> deleteByListName(@PathVariable("listName") String listName){
-		try {
-			Playlist playlistData = playlistRepository.findByNombre(listName);
-			if(playlistData==null || playlistData.getNombre()==null) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			playlistRepository.deleteByNombre(listName);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+	public ResponseEntity<?> deleteByListName(@PathVariable("listName") String listName){
+		return playlistService.deleteByListName(listName);		
 	}
 	
+	//API para la consulta de todas las canciones en bd
 	@GetMapping("/songs")
-	public ResponseEntity<List<Song>> findAllSongs(){
-		try {
-			List<Song> listSongs = new ArrayList<Song>();
-			songRepository.findAll().forEach(listSongs::add);
-			
-			if(listSongs.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<>(listSongs, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<?> findAllSongs(){
+		return playlistService.findAllSongs();
 	}
 
 }

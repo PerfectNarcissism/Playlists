@@ -27,14 +27,17 @@ export class AppComponent implements OnInit{
   constructor(private appService: AppService) { }
 
   ngOnInit() {
-    this.appService.getPlaylists().subscribe(
-       items => {this.playlists = items
-       console.log(this.playlists)}
-    );
-
+    this.findAllPlaylists();
     this.appService.getSongs().subscribe(
       items => this.allSongs = items
     )
+  }
+
+  findAllPlaylists(){
+    this.appService.getPlaylists().subscribe(
+      items => {this.playlists = items
+      console.log(this.playlists)}
+   );
   }
 
   showCreateDiv(){
@@ -77,6 +80,11 @@ export class AppComponent implements OnInit{
         }
       }
     )
+  }
+
+  deletePlaylist(playlist:Playlist){
+    this.appService.deleteService(playlist.nombre)
+    this.findAllPlaylists();
   }
   
 }

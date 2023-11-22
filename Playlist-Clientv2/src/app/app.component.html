@@ -104,6 +104,16 @@
     margin: 5px;
   }
 
+  .btn-red{
+    padding: 5px;
+    background-color: rgb(84, 0, 21);
+    border-radius: 10%;
+    color: #eeeeee;
+    font-size: larger;
+    font-weight: bold;
+    margin: 5px;
+  }
+
   svg.material-icons {
     height: 24px;
     width: auto;
@@ -368,7 +378,7 @@
           <td>#</td>
           <td>Name</td>
           <td>Description</td>
-          <td>Songs</td>
+          <td>Actions</td>
         </tr>
       </thead>
       <tbody>
@@ -377,6 +387,7 @@
           <td>{{ item.nombre }}</td>
           <td>{{ item.descripcion }}</td>
           <td><button class="btn-second" (click)="showSong(item.canciones)">See</button></td>
+          <td><button class="btn-red" (click)="deletePlaylist(item)">X</button></td>
         </tr>
       </tbody>
     </table>
