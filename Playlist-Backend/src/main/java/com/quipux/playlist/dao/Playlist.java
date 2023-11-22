@@ -2,6 +2,7 @@ package com.quipux.playlist.dao;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ public class Playlist {
 	private long id;
 	private String nombre;
 	private String descripcion;
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Song> canciones;
 	
 	public Playlist() { }
